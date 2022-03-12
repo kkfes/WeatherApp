@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name">Weather</string>
+    <string name="temp_icon">°C</string>
+    <string name="forecast_7_days">Прогноз на 7 дней</string>
+    <string name="now">Сейчас</string>
+    <string name="weather_name">Погода</string>
+    <string name="insert_city_name">Введите местоположение</string>
+    <string name="city_settings">Управление городами</string>
+    <string name="api_key_enter">API ключ</string>
+    <string name="enter_api_key">Введите API ключ</string>
+    <string name="set_key">Установить ключ</string>
+    <string name="get_api_key">Получить API ключ можно на сайте https://openweathermap.org во вкладке \'My api keys\'</string>
+    <string name="temperature">Температура:</string>
+    <string name="hourly_forecast">Почасовая погода на два дня</string>
+</resources>
