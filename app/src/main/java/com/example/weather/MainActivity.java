@@ -35,9 +35,12 @@ import com.sdsmdg.tastytoast.TastyToast;
 
 import org.json.JSONObject;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.TimeZone;
+import java.util.concurrent.TimeUnit;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -120,7 +123,7 @@ public class MainActivity extends AppCompatActivity {
                                 OneCallObject o = OneCallObject.getObject(jsonObject);
                                 Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                                 showNotification(getApplicationContext(), "Погода " + o.getCurrent().getTemp() + "°", "Обновление в фоновом режиме...", intent, 1);
-                            } catch (Exception e) {
+                            } catch (Exception ignored) {
                             }
                         },
                         error -> {
@@ -402,7 +405,7 @@ public class MainActivity extends AppCompatActivity {
 
                         binding.day1Description.setText("Сегодня • " + firstUpperCase(o.getDaily().get(0).getWeather().get(0).getDescription()));
                         binding.day2Description.setText("Завтра • " + firstUpperCase(o.getDaily().get(1).getWeather().get(0).getDescription()));
-                        binding.day3Description.setText(firstUpperCase(new java.text.SimpleDateFormat("E").format(new java.util.Date(o.getDaily().get(2).getDt() * 1000))) + " • " + firstUpperCase(o.getDaily().get(2).getWeather().get(0).getDescription()));
+                        binding.day3Description.setText(firstUpperCase(getDate(o.getTimezone_offset(),"E",o.getDaily().get(0).getDt())) + " • " + firstUpperCase(o.getDaily().get(2).getWeather().get(0).getDescription()));
                         binding.day1Description.setSelected(true);
                         binding.day2Description.setSelected(true);
                         binding.day3Description.setSelected(true);
@@ -412,9 +415,9 @@ public class MainActivity extends AppCompatActivity {
                         binding.day3Temp.setText((int)o.getDaily().get(2).getTemp().getDay() + "° / " + (int)o.getDaily().get(2).getTemp().getNight() + "°");
 
                         binding.now1.setText("Сейчас");
-                        binding.now2.setText(new java.text.SimpleDateFormat("HH:mm").format(new java.util.Date(o.getHourly().get(1).getDt() * 1000)));
-                        binding.now3.setText(new java.text.SimpleDateFormat("HH:mm").format(new java.util.Date(o.getHourly().get(2).getDt() * 1000)));
-                        binding.now4.setText(new java.text.SimpleDateFormat("HH:mm").format(new java.util.Date(o.getHourly().get(3).getDt() * 1000)));
+                        binding.now2.setText(getDate(o.getTimezone_offset(),"HH:mm",o.getHourly().get(1).getDt()));
+                        binding.now3.setText(getDate(o.getTimezone_offset(),"HH:mm",o.getHourly().get(2).getDt()));
+                        binding.now4.setText(getDate(o.getTimezone_offset(),"HH:mm",o.getHourly().get(3).getDt()));
 
                         binding.now1Temp.setText((int) o.getHourly().get(0).getTemp() + "°");
                         binding.now2Temp.setText((int) o.getHourly().get(1).getTemp() + "°");
@@ -457,6 +460,18 @@ public class MainActivity extends AppCompatActivity {
         );
         RequestQueue requestQueue = Volley.newRequestQueue(this);
         requestQueue.add(stringRequest);
+    }
+
+
+    public String getDate(int timezone,String format,long unix){
+        long time = unix*1000;
+        @SuppressLint("SimpleDateFormat") SimpleDateFormat timeFormat = new SimpleDateFormat(format);
+        String f = String.valueOf(TimeUnit.SECONDS.toHours(timezone));
+        if(f.length()==1){
+            f="+"+f;
+        }
+        timeFormat.setTimeZone(TimeZone.getTimeZone("GMT"+f));
+        return timeFormat.format(time);
     }
 
     @Override

@@ -12,7 +12,12 @@ import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
+
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.TimeZone;
+import java.util.concurrent.TimeUnit;
 
 
 public class ForecastActivity extends AppCompatActivity {
@@ -45,20 +50,10 @@ public class ForecastActivity extends AppCompatActivity {
     private ArrayList<Entry> getDataSet(){
         ArrayList<Entry> entries = new ArrayList<>();
         for (OneCallObject.Daily d:MainActivity.o1.getDaily()){
-            entries.add(new BarEntry(Float.parseFloat(new java.text.SimpleDateFormat("dd").format(new java.util.Date (d.getDt()*1000))),(float) d.getTemp().getDay()));
+            entries.add(new BarEntry(Float.parseFloat(getDate(MainActivity.o1.getTimezone_offset(),"dd",d.getDt())),(float) d.getTemp().getDay()));
         }
         return entries;
     }
-
-    @SuppressLint("SimpleDateFormat")
-    private ArrayList<Entry> getDataSetNight(){
-        ArrayList<Entry> entries = new ArrayList<>();
-        for (OneCallObject.Daily d:MainActivity.o1.getDaily()){
-            entries.add(new BarEntry((float) d.getTemp().getDay(), Float.parseFloat(new java.text.SimpleDateFormat("dd").format(new java.util.Date (d.getDt()*1000)))));
-        }
-        return entries;
-    }
-
 
     private void setListeners() {
         binding.imageBack.setOnClickListener(v -> onBackPressed());
@@ -77,6 +72,17 @@ public class ForecastActivity extends AppCompatActivity {
     public String firstUpperCase(String word) {
         if (word == null || word.isEmpty()) return "";
         return word.substring(0, 1).toUpperCase() + word.substring(1);
+    }
+
+    public String getDate(int timezone,String format,long unix){
+        long time = unix*1000;
+        @SuppressLint("SimpleDateFormat") SimpleDateFormat timeFormat = new SimpleDateFormat(format);
+        String f = String.valueOf(TimeUnit.SECONDS.toHours(timezone));
+        if(f.length()==1){
+            f="+"+f;
+        }
+        timeFormat.setTimeZone(TimeZone.getTimeZone("GMT"+f));
+        return timeFormat.format(time);
     }
 
 }
