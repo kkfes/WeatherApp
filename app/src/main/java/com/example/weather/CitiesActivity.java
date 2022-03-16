@@ -148,9 +148,7 @@ public class CitiesActivity extends AppCompatActivity implements CityListener {
                         canAdd=false;
                     }
                 },
-                error -> {
-                    canAdd=false;
-                }
+                error -> canAdd=false
         );
         RequestQueue requestQueue = Volley.newRequestQueue(context);
         requestQueue.add(stringRequest);
@@ -183,31 +181,5 @@ public class CitiesActivity extends AppCompatActivity implements CityListener {
         binding.cities.setAdapter(citiesAdapter);
         loading(false);
     }
-
-
-    public String updateCityInfo(String city){
-        AtomicReference<String> city1 = null;
-        StringRequest stringRequest = new StringRequest(Request.Method.GET,
-                "https://api.openweathermap.org/data/2.5/weather?q="+city+"&appid="+API_KEY,
-                response -> {
-                    JSONObject jsonObject = null;
-                    try {
-                        jsonObject = new JSONObject(response);
-                        city1.set(jsonObject.getString("name"));
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                },
-                error -> {
-                    TastyToast.makeText(getApplicationContext(), "ERROR UPDATE INFO: "+error.getMessage(), TastyToast.LENGTH_SHORT,TastyToast.ERROR).show();
-                }
-        );
-        RequestQueue requestQueue = Volley.newRequestQueue(this);
-        requestQueue.add(stringRequest);
-        return city1.get();
-    }
-
-
-
 
 }

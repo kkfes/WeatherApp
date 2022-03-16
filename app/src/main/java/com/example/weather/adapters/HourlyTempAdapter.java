@@ -54,7 +54,7 @@ public class HourlyTempAdapter extends RecyclerView.Adapter<HourlyTempAdapter.Ho
 
         @SuppressLint({"SimpleDateFormat", "SetTextI18n"})
         void setData(OneCallObject.Hourly hourly){
-            binding.date.setText(new java.text.SimpleDateFormat("MM.dd.yyyy HH:mm").format(new java.util.Date (hourly.getDt()*1000)));
+            binding.date.setText(new java.text.SimpleDateFormat("dd.MM.yyyy HH:mm").format(new java.util.Date (hourly.getDt()*1000)));
             binding.temperature.setText((int) hourly.getTemp()+"°");
             binding.description.setText(firstUpperCase(hourly.getWeather().get(0).getDescription()));
             binding.icon.setImageResource(MainActivity.getWeatherIcon(hourly.getWeather().get(0).getIcon()));
