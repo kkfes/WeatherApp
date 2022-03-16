@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Looper;
-import android.util.Log;
 import android.view.View;
 
 import com.android.volley.Request;
@@ -18,11 +17,6 @@ import com.example.weather.adapters.CitiesAdapter;
 import com.example.weather.databinding.ActivityCitiesBinding;
 import com.example.weather.listeners.CityListener;
 import com.sdsmdg.tastytoast.TastyToast;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.util.concurrent.atomic.AtomicReference;
 
 public class CitiesActivity extends AppCompatActivity implements CityListener {
 
